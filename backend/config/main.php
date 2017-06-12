@@ -53,6 +53,15 @@ return [
             'rules' => [
             ],
         ],
+        //七牛云配置
+        'qiniu'=>[
+            'class'=>\backend\components\Qiniu::className(),
+            'up_host'=>'http://up-z2.qiniu.com',
+            'accessKey'=>'1d0e88-5TukIYJX9Fvv25WEUgpfnBuSbBdFSuSxD',
+            'secretKey'=>'aJCuSrHWxNM7mANw1FEQpH3XwbX1a9D0d6ShPXia',
+            'bucket'=>'dlm1996',
+            'domain'=>'http://or9rs3wp9.bkt.clouddn.com/'
+        ],
     ],
     'params' => $params,
 ];
