@@ -9,8 +9,7 @@ class UserController extends \yii\web\Controller
 {
     //管理员列表
     public function actionIndex(){
-        //var_dump(\Yii::$app->user->identity);
-       $admins = User::find()->where('status > -1')->all();
+        $admins = User::find()->where('status > -1')->all();
         return $this->render('index',['admins'=>$admins]);
     }
     //添加管理员

@@ -87,8 +87,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if($insert){
             $this->created_at = time();
-            //生成随机字符串作为自动登录验证口令
-            $this->auth_key = Yii::$app->security->generateRandomString();
         }else{
             $this->updated_at = time();
         }
@@ -156,7 +154,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->auth_key;
+        // TODO: Implement getAuthKey() method.
     }
 
     /**
@@ -169,18 +167,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->getAuthKey() == $authKey;
+        // TODO: Implement validateAuthKey() method.
     }
-
-   /* public function login($identity, $duration = 0)
-    {
-        if ($this->beforeLogin($identity, false, $duration)) {
-            $this->switchIdentity($identity, $duration);
-            $id = $identity->getId();
-            $ip = Yii::$app->getRequest()->getUserIP();
-            Yii::info("User '$id' logged in from $ip with duration $duration.", __METHOD__);
-            $this->afterLogin($identity, false, $duration);
-        }
-        return !$this->getIsGuest();
-    }*/
 }

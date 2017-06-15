@@ -13,6 +13,7 @@ class m170612_052413_create_goods_intro_table extends Migration
     public function up()
     {
         $this->createTable('goods_intro', [
+            'id'=>$this->primaryKey(),
             'goods_id' => $this->integer()->notNull()->comment('商品id'),
             'content'=>$this->text()->comment('商品描述'),
         ]);
