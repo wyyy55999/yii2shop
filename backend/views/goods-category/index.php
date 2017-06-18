@@ -49,7 +49,7 @@
         var lft = parseInt(tr.attr('data-lft'));
         var rgt = parseInt(tr.attr('data-rgt'));
         //获取当前的class  检查被选元素是否包含指定的 class。
-        //var show = $(this).hasClass('toogle_cate glyphicon glyphicon-chevron-up');
+        var show = $(this).hasClass('toogle_cate glyphicon glyphicon-chevron-up');
         //切换图标
         $(this).toggleClass('toogle_cate glyphicon glyphicon-chevron-down');
         $(this).toggleClass('toogle_cate glyphicon glyphicon-chevron-up');
@@ -58,8 +58,8 @@
             //$(this).attr('data-tree')  是指所有tr的树
             if(parseInt($(this).attr('data-tree'))==tree && parseInt($(this).attr('data-lft'))>lft && parseInt($(this).attr('data-rgt'))<rgt){
                          //淡入显示              //淡出隐藏
-                // show ? $(this).fadeIn() : $(this).fadeOut(); 
-                $(this).fadeToggle();  //fadeToggle()方法可以在 fadeIn() 与 fadeOut() 方法之间进行切换
+                 show ? $(this).fadeIn() : $(this).fadeOut(); 
+                //$(this).fadeToggle();  //fadeToggle()方法可以在 fadeIn() 与 fadeOut() 方法之间进行切换  有bug！！！
             }
         })
     });

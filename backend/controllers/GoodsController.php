@@ -8,6 +8,7 @@ use backend\models\GoodsAlbum;
 use backend\models\GoodsCategory;
 use backend\models\GoodsDayCount;
 use backend\models\GoodsIntro;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Request;
 use xj\uploadify\UploadAction;
@@ -20,50 +21,67 @@ class GoodsController extends \yii\web\Controller
         //实例化
         $goods = new Goods();
         $request = new Request();
+        //分页对象
+        $page = new Pagination([
+            'totalCount'=>Goods::find()->where("status >0")->count(),
+            'defaultPageSize'=>2,
+        ]);
         //使用场景
         $goods->scenario = Goods::SCENARIO_SEARCH;
-        if($request->get() != null){
+        if(isset($request->get()['Goods'])){
             //定义数组保存条件
             $condition = [];
-            if ($_GET['Goods']['name'] != null) {
-                $condition[] = "name like '%{$_GET['Goods']['name']}%'";
+            if ($request->get()['Goods']['name'] != null) {
+                $condition[] = "name like '%{$request->get()['Goods']['name']}%'";
+
             }
-            if ($_GET['Goods']['sn'] != null) {
-                $condition[] = "sn like '%{$_GET['Goods']['sn']}%'";
+            if ($request->get()['Goods']['sn'] != null) {
+                $condition[] = "sn like '%{$request->get()['Goods']['sn']}%'";
             }
-            if ($_GET['Goods']['goods_category_id'] != null) {
-                $condition[] = "goods_category_id={$_GET['Goods']['goods_category_id']}";
+            if($request->get()['Goods']['min_price'] && $request->get()['Goods']['max_price']){
+                $condition[] = "shop_price <= {$request->get()['Goods']['max_price']} and shop_price >= {$request->get()['Goods']['min_price']}";
             }
-            if ($_GET['Goods']['brand_id'] != null) {
-                $condition[] = "brand_id={$_GET['Goods']['brand_id']}";
+//            if ($request->get()['Goods']['goods_category_id'] != null) {
+//                $condition[] = "goods_category_id={$request->get()['Goods']['goods_category_id']}";
+//            }
+            if ($request->get()['Goods']['brand_id'] != null) {
+                $condition[] = "brand_id={$request->get()['Goods']['brand_id']}";
             }
             if($condition){   //搜索条件不为空
                 //拆分数组
                 $conditions = implode(' and ', $condition);
+                //实例化分页对象
+                $page = new Pagination([
+                    'totalCount'=>Goods::find()->where("status >0 and {$conditions}")->count(),
+                    'defaultPageSize'=>2,
+                ]);
                 //如果有条件
-                $goodses = Goods::find()->where("status >0 and {$conditions}")->all();
+                $goodses = Goods::find()->where("status >0 and {$conditions}")->offset($page->offset)->limit($page->limit)->all();
                 //设置输入框回显搜索要求
                 $goods->name = $_GET['Goods']['name'];
                 $goods->sn = $_GET['Goods']['sn'];
+                $goods->min_price = $request->get()['Goods']['min_price'];
+                $goods->max_price = $request->get()['Goods']['max_price'];
                 //设置商品分类选中项
-                $goods->goods_category_id = $_GET['Goods']['goods_category_id'];
+                //$goods->goods_category_id = $_GET['Goods']['goods_category_id'];
                 //设置品牌选中项
                 $goods->brand_id = $_GET['Goods']['brand_id'];
             }else{   //搜索条件为空  也就是按下了搜索键  但是并没有搜索任何内容
-                $goodses = Goods::find()->where('status > 0')->all();
+                $goodses = Goods::find()->where('status > 0')->offset($page->offset)->limit($page->limit)->all();
             }
         }else{
             //没有条件  也就是直接输入index
-            $goodses = Goods::find()->where('status > 0')->all();
+            $goodses = Goods::find()->where('status > 0')->offset($page->offset)->limit($page->limit)->all();
         }
         //品牌
         $brands = Brand::find()->all();
         $brand = ArrayHelper::map($brands,'id','name');
-        //分类
-        $cates = GoodsCategory::find()->all();
-        $goods_cates = ArrayHelper::map($cates,'id','name');
+//        //分类
+//        $cates = GoodsCategory::find()->all();
+//        $goods_cates = ArrayHelper::map($cates,'id','name');
+//        /*'goods_cates'=>$goods_cates*/
         //所有商品
-        return $this->render('index',['goodses'=>$goodses,'goods'=>$goods,'brands'=>$brand,'goods_cates'=>$goods_cates]);
+        return $this->render('index',['goodses'=>$goodses,'goods'=>$goods,'brands'=>$brand,'page'=>$page]);
     }
     //添加商品
     public function actionAdd(){

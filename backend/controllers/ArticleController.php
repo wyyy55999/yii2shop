@@ -6,6 +6,8 @@ namespace backend\controllers;
 use backend\models\Article;
 use backend\models\ArticleCategory;
 use backend\models\ArticleDetail;
+use Codeception\Lib\Generator\PageObject;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
@@ -15,9 +17,15 @@ class ArticleController extends Controller
     //显示文章列表
     public function actionIndex(){
         //实例化
-        $articles = Article::find()->all();
+        //$articles = Article::find()->where('status > -1')->all();
+        $page = new Pagination([
+            'defaultPageSize'=>10,  //每页显示的条数
+            'totalCount'=>Article::find()->where('status > -1')->count(),  //总条数
+        ]);
+        //每页显示的数据
+        $articles = Article::find()->where('status > 0')->offset($page->offset)->limit($page->limit)->all();
         //返回到页面
-        return $this->render('index',['articles'=>$articles]);
+        return $this->render('index',['articles'=>$articles,'page'=>$page]);
     }
     //新增文章及详情
     public function actionAdd(){

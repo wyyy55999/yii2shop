@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 
 use backend\models\Brand;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
 use yii\web\UploadedFile;
@@ -15,10 +16,15 @@ class BrandController extends Controller
 {
     //品牌列表
     public function actionIndex(){
+        //实例化分页工具条
+        $page = new Pagination([
+            'totalCount'=>Brand::find()->where('status > -1')->count(),  //总条数
+            'defaultPageSize'=>2,//每页显示条数
+        ]);
         //实例化全部品牌
-        $brands = Brand::find()->where('status > -1')->all();
+        $brands = Brand::find()->where('status > -1')->offset($page->offset)->limit($page->limit)->all();
         //显示到页面
-        return $this->render('index',['brands'=>$brands]);
+        return $this->render('index',['brands'=>$brands,'page'=>$page]);
     }
     //新增品牌
     public function actionAdd(){
@@ -160,9 +166,11 @@ class BrandController extends Controller
                 'afterSave' => function (UploadAction $action) {
                     //图片路径
                     $imgUrl = $action->getWebUrl();
+                    //$action->getSavePath();
                     //$action->output['fileUrl'] = $action->getWebUrl();
                     //调用七牛云组件，将图片上传到七牛云
                     $qiniu = \Yii::$app->qiniu;
+                    //$qiniu->uploadFile($action->getSavePath(),$imgUrl);
                     $qiniu->uploadFile(\Yii::getAlias('@webroot').$imgUrl,$imgUrl);
                     //获取图片在七牛云的地址
                     $url = $qiniu->getLink($imgUrl);
@@ -190,4 +198,19 @@ class BrandController extends Controller
         //获取文件路径
         $url = $qiniu->getLink($key);
     }
+    public function actionTestTest(){
+        //图片路径
+        $imgUrl = '/upload/test.jpg';
+        //$action->output['fileUrl'] = $action->getWebUrl();
+        //调用七牛云组件，将图片上传到七牛云
+        $qiniu = \Yii::$app->qiniu;
+        // var_dump($imgUrl);exit;
+        $qiniu->uploadFile(\Yii::getAlias('@webroot').$imgUrl,$imgUrl);
+        //获取图片在七牛云的地址
+        $url = $qiniu->getLink($imgUrl);
+        var_dump($url);exit;
+        //将前端的地址改成在七牛云的地址
+        //$action->output['fileUrl'] = $url;
+    }
+
 }

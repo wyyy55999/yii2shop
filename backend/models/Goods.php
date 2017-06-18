@@ -27,6 +27,9 @@ class Goods extends \yii\db\ActiveRecord
     static public $saleOptions = [1=>'在售',0=>'下架'];
     //状态
     static public $statusOptions = [1=>'正常',0=>'回收站'];
+    //最低价和最高价
+    public $min_price;
+    public $max_price;
     /**
      * @inheritdoc
      */

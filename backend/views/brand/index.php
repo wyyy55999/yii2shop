@@ -34,6 +34,12 @@
     </tr>
 <?php endforeach;?>
 </table>
+<?php
+echo \yii\widgets\LinkPager::widget([
+    'pagination'=>$page,
+    'hideOnSinglePage'=>false,
+]);
+?>
 <script type="text/javascript">
     function notice() {
         return confirm('您确认删除吗？删除后数据无法恢复!');

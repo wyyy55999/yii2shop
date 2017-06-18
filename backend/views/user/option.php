@@ -8,5 +8,8 @@ if(!$admin->password_hash){
 }
 echo $form->field($admin,'email');
 echo $form->field($admin,'status',['inline'=>true])->radioList(\backend\models\User::$statusOptions);
+if(!$admin->id){
+    echo $form->field($admin,'roles',['inline'=>true])->checkboxList(\backend\models\User::getRoles());
+}
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-success']);
 \yii\bootstrap\ActiveForm::end();

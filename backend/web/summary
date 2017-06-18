@@ -33,6 +33,21 @@
     密码使用\Yii::$app->security->validatePassword()进行比对
     注销时使用\Yii::$app->user->logout();
 3.关于自动登录
+    判断用户是否点击了自动登录，如果点击了保存一周，否则不保存：
+    $duration = $this->is_remember ? 7*24*3600 : 0;
+    然后在登录时加上过期时间：
+    \Yii::$app->user->login($admin,$duration);
 
+06.16  用户的角色和权限管理及关联
+1.权限管理
+    通过\Yii::$app->authManager->getPermission($this->name)判断是否存在当前输入的权限
+    不存在该权限则创建，\Yii::$app->authManager->createPermission($this->name)
+2.角色管理
+    通过\Yii::$app->authManager->getRole($this->name)判断是否存在当前输入的角色
+    不存在该角色则创建，\Yii::$app->authManager->createRole($this->name)
+3.权限和角色关联
+
+06.18  菜单
+注意：过滤器只能拦截url的访问
 
 

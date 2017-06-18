@@ -18,7 +18,7 @@ use Yii;
 class Article extends \yii\db\ActiveRecord
 {
     //定义状态
-    static public $statusOptions = [1=>'显示',0=>'隐藏',-1=>'删除'];
+    static public $statusOptions = [1=>'显示',0=>'隐藏'];
     /**
      * @inheritdoc
      */

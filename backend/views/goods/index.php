@@ -30,13 +30,19 @@ echo '</div>';
 echo '<div class="form-group col-lg-2">';
 echo $form->field($goods,'sn')->textInput(['placeholder'=>'请输入商品货号'])->label(false);
 echo '</div>';
-echo '<div class="form-group col-lg-2">';
+/*echo '<div class="form-group col-lg-2">';
 echo $form->field($goods,'goods_category_id')->dropDownList($goods_cates,['prompt'=>'请选择分类'])->label(false);
+echo '</div>';*/
+echo '<div class="form-group col-lg-2">';
+echo $form->field($goods,'min_price')->textInput(['placeholder'=>'最低价'])->label(false);
+echo '</div> <p style="float:left;margin-top: 5px;"> -- </p> ';
+echo '<div class="form-group col-lg-2">';
+echo $form->field($goods,'max_price')->textInput(['placeholder'=>'最高价'])->label(false);
 echo '</div>';
 echo '<div class="form-group col-lg-2">';
 echo $form->field($goods,'brand_id')->dropDownList($brands,['prompt'=>'请选择品牌'])->label(false);
 echo '</div>';
-echo \yii\bootstrap\Html::submitButton('搜索',['class'=>'btn btn-info','onclick'=>'getvalues()','id'=>'submitbutton']);
+echo \yii\bootstrap\Html::submitButton('搜索',['class'=>'btn btn-info','id'=>'submitbutton']);
 \yii\bootstrap\ActiveForm::end();
 ?>
 
@@ -86,6 +92,12 @@ echo \yii\bootstrap\Html::submitButton('搜索',['class'=>'btn btn-info','onclic
     </tr>
     <?php endforeach;?>
 </table>
+<?php
+echo \yii\widgets\LinkPager::widget([
+    'pagination'=>$page,
+    'hideOnSinglePage'=>false,
+]);
+?>
 <script type="text/javascript">
     function notice() {
         return confirm('您确认删除吗？删除后数据无法恢复!');
