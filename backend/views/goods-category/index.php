@@ -32,7 +32,7 @@
                 }
                 ?></td>
             <td>
-                <?=\yii\bootstrap\Html::a('修改',['goods-category/update','id'=>$cate->id])?>
+                <?=Yii::$app->user->can('goods-category/update') ? \yii\bootstrap\Html::a('修改',['goods-category/update','id'=>$cate->id]) : ''?>
             </td>
         </tr>
     <?php endforeach;?>

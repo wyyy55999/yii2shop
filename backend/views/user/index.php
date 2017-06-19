@@ -41,10 +41,9 @@
         <td><?=$admin->last_login_time ? date('Y-m-d H:i:s',$admin->last_login_time) : '--'?></td>
         <td><?=$admin->last_login_ip ? $admin->last_login_ip : '--'?></td>
         <td>
-            <?=\yii\bootstrap\Html::a('修改',['user/update','id'=>$admin->id])?> /
+            <?=Yii::$app->user->can('user/update') ? \yii\bootstrap\Html::a('修改',['user/update','id'=>$admin->id]) : ''?>
             <!-- 物理删除-->
-            <?=\yii\bootstrap\Html::a('删除',['user/delete','id'=>$admin->id],['onclick'=>'return notice()'])?> /
-            <?=\yii\bootstrap\Html::a('修改角色',['user/change-role','id'=>$admin->id])?>
+            <?=Yii::$app->user->can('user/delete') ? \yii\bootstrap\Html::a('删除',['user/delete','id'=>$admin->id],['onclick'=>'return notice()']) : ''?>
         </td>
     </tr>
     <?php endforeach;?>

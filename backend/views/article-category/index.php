@@ -27,8 +27,8 @@
             <td><?=\backend\models\Brand::$statusOptions[$cate->status]?></td>
             <td><?=($cate->is_help == 1) ? '帮助型文档':'非帮助型文档';?></td>
             <td>
-                <?=\yii\bootstrap\Html::a('修改',['article-category/update','id'=>$cate->id])?> /
-                <?=\yii\bootstrap\Html::a('删除',['article-category/delete','id'=>$cate->id],['onclick'=>'return notice()'])?>
+                <?=Yii::$app->user->can('article-category/update') ? \yii\bootstrap\Html::a('修改',['article-category/update','id'=>$cate->id]) : ''?> /
+                <?=Yii::$app->user->can('article-category/delete') ? \yii\bootstrap\Html::a('删除',['article-category/delete','id'=>$cate->id],['onclick'=>'return notice()']) : ''?>
             </td>
         </tr>
     <?php endforeach;?>

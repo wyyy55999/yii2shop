@@ -86,8 +86,8 @@ echo \yii\bootstrap\Html::submitButton('搜索',['class'=>'btn btn-info','id'=>'
         <td><?=$goods->sort?></td>
         <td><?=date('Y-m-d H:i:s',$goods->create_time)?></td>
         <td>
-            <?=\yii\bootstrap\Html::a('修改',['goods/update','id'=>$goods->id])?> /
-            <?=\yii\bootstrap\Html::a('删除',['goods/delete','id'=>$goods->id],['onclick'=>'return notice()'])?>
+            <?=Yii::$app->user->can('goods/update') ? \yii\bootstrap\Html::a('修改',['goods/update','id'=>$goods->id]) : ''?> /
+            <?=Yii::$app->user->can('goods/delete') ? \yii\bootstrap\Html::a('删除',['goods/delete','id'=>$goods->id],['onclick'=>'return notice()']) : ''?>
         </td>
     </tr>
     <?php endforeach;?>

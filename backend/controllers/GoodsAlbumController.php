@@ -10,7 +10,7 @@ use yii\web\Controller;
 use yii\web\Request;
 use yii\web\UploadedFile;
 
-class GoodsAlbumController extends Controller
+class GoodsAlbumController extends PublicController
 {
     //添加商品相册图片页面并且显示已经添加了的图片
     public function actionAdd($goods_id){

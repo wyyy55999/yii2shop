@@ -8,7 +8,7 @@ use backend\models\ArticleCategory;
 use yii\web\Controller;
 use yii\web\Request;
 
-class ArticleCategoryController extends Controller
+class ArticleCategoryController extends PublicController
 {
     //文章分类列表
     public function actionIndex(){

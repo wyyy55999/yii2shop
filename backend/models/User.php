@@ -113,7 +113,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $scenarios =  parent::scenarios();
         $scenarios[self::SCENARIO_ADD] = ['username',  'password', 'email','repassword','status', 'created_at', 'updated_at', 'last_login_time','auth_key','password_reset_token','roles'];
-        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email','status', 'created_at', 'updated_at', 'last_login_time','auth_key','password_reset_token'];
+        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email','status', 'created_at', 'updated_at', 'last_login_time','auth_key','password_reset_token','roles'];
         $scenarios[self::SCENARIO_CHANG_PWD] = ['password','repassword','old_password'];
         return $scenarios;
     }
@@ -148,7 +148,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function updateUserRole($id){
         //清除角色分配好的权限
         Yii::$app->authManager->revokeAll($id);
-
         //循环添加
         foreach ($this->roles as $roleName){
             $roleObj = Yii::$app->authManager->getRole($roleName);

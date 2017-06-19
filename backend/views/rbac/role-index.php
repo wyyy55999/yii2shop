@@ -1,3 +1,8 @@
+<style type="text/css">
+    table th,#option_td{
+        text-align: center;
+    }
+</style>
 <?=\yii\bootstrap\Html::a('添加角色',['rbac/role-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
 <table class="table table-bordered table-hover">
     <tr>
@@ -8,14 +13,14 @@
     </tr>
     <?php foreach ($roles as $role): ?>
         <tr>
-            <td><?=$role->name?></td>
-            <td><?=$role->description?></td>
+            <td width="150"><?=$role->name?></td>
+            <td width="200"><?=$role->description?></td>
             <td><?php
                 foreach(Yii::$app->authManager->getPermissionsByRole($role->name) as $permission){
                     echo $permission->description.'、';
                 }
                 ?></td>
-            <td>
+            <td width="100" id="option_td">
                 <?=\yii\bootstrap\Html::a('修改',['rbac/role-update','name'=>$role->name])?> /
                 <?=\yii\bootstrap\Html::a('删除',['rbac/role-delete','name'=>$role->name],['onclick'=>'return notice()'])?>
             </td>

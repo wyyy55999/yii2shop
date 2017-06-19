@@ -27,9 +27,9 @@
         <td><?=$brand->sort?></td>
         <td><?=\backend\models\Brand::$statusOptions[$brand->status]?></td>
         <td>
-            <?=\yii\bootstrap\Html::a('修改',['brand/update','id'=>$brand->id])?> /
+            <?=Yii::$app->user->can('brand/update') ? \yii\bootstrap\Html::a('修改',['brand/update','id'=>$brand->id]).' / ' : ''; ?>
             <!-- 物理删除-->
-            <?=\yii\bootstrap\Html::a('删除',['brand/del','id'=>$brand->id],['onclick'=>'return notice()'])?>
+            <?=Yii::$app->user->can('brand/delete') ? \yii\bootstrap\Html::a('删除',['brand/delete','id'=>$brand->id],['onclick'=>'return notice()']) : '';?>
         </td>
     </tr>
 <?php endforeach;?>

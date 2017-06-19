@@ -11,7 +11,7 @@ use yii\rbac\Role;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class RbacController extends Controller
+class RbacController extends PublicController
 {
     //显示权限列表
     public function actionPermissionIndex(){

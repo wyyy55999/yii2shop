@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
 
-class ArticleController extends Controller
+class ArticleController extends PublicController
 {
     //显示文章列表
     public function actionIndex(){

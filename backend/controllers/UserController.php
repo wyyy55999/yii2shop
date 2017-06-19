@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\User;
 use backend\models\UserLoginForm;
 use backend\models\UserRoleForm;
@@ -9,6 +10,16 @@ use yii\data\Pagination;
 
 class UserController extends \yii\web\Controller
 {
+    //使用过滤器
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'only'=>['index','update','delete','change-role','change-pwd'],
+            ]
+        ];
+    }
     //管理员列表
     public function actionIndex(){
         //实例化分页工具条
@@ -50,11 +61,15 @@ class UserController extends \yii\web\Controller
         if(\Yii::$app->request->isPost){
             $admin->load(\Yii::$app->request->post());
             if($admin->validate()){
-                $admin->save(false);
-                \Yii::$app->session->setFlash('success','修改管理员成功');
-                return $this->redirect(['user/index']);
+                if($admin->updateUserRole($id)){
+                    $admin->save(false);
+                    \Yii::$app->session->setFlash('success','修改管理员成功');
+                    return $this->redirect(['user/index']);
+                }
             }
         }
+        //如果不是post提交就回显
+        $admin->loadCurrentUserRole(\Yii::$app->authManager->getRolesByUser($id));
         return $this->render('option',['admin'=>$admin]);
     }
     //删除管理员

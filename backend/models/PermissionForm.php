@@ -16,6 +16,7 @@ class PermissionForm extends Model
     {
         return [
             [['name','description'],'required'],
+            ['name','match','pattern'=>'/[\w\-]+\/[\w\-]+/','message'=>'权限格式错误，请重新输入'],
         ];
     }
     //标签名

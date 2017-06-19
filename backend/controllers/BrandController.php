@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 
+use backend\components\RbacFilter;
 use backend\models\Brand;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -12,8 +13,10 @@ use xj\uploadify\UploadAction;
 use crazyfd\qiniu\Qiniu;   //七牛云
 
 
-class BrandController extends Controller
+class BrandController extends PublicController
 {
+
+
     //品牌列表
     public function actionIndex(){
         //实例化分页工具条
@@ -112,7 +115,7 @@ class BrandController extends Controller
         return $this->redirect(['brand/index']);
     }*/
     //逻辑删除
-    public function actionDel($id){
+    public function actionDelete($id){
         //实例化
         $brand = Brand::findOne(['id'=>$id]);
         //修改状态为-1

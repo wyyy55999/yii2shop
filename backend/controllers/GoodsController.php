@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Request;
 use xj\uploadify\UploadAction;
 
-class GoodsController extends \yii\web\Controller
+class GoodsController extends PublicController
 {
     //商品列表
     public function actionIndex()

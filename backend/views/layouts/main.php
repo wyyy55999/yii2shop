@@ -32,41 +32,8 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => '京西商城后台',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => '首页', 'url' => ['/site/index']],
-        ['label' => '商品列表', 'url' => ['/goods/index']],
-        ['label' => '商品分类列表', 'url' => ['/goods-category/index']],
-        ['label' => '品牌列表', 'url' => ['/brand/index']],
-    ];
-    if (Yii::$app->user->isGuest) {   //如果是游客  就显示登录
-        $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
-    } else {  //否则  就显示退出登录
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/user/logout'], 'post')
-            . Html::submitButton(
-                //显示出登录名
-                '退出登录 (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout','id'=>'logout_button']
-            )
-            .Html::a(
-                '修改密码',['user/change-pwd'],
-                ['class' => 'btn btn-link change_pwd_button','id'=>'change_pwd_button']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
+    //导航  widget()会去调用MenuWidget下面的init和run方法
+    echo \backend\widgets\MenuWidget::widget();
     ?>
 
     <div class="container">
