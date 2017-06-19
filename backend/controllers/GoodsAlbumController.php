@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 
+use backend\components\RbacFilter;
 use backend\models\GoodsAlbum;
 use xj\uploadify\UploadAction;
 use yii\helpers\Url;
@@ -10,8 +11,18 @@ use yii\web\Controller;
 use yii\web\Request;
 use yii\web\UploadedFile;
 
-class GoodsAlbumController extends PublicController
+class GoodsAlbumController extends Controller
 {
+    //使用过滤器
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'only'=>['add','add-save','delete'],
+            ]
+        ];
+    }
     //添加商品相册图片页面并且显示已经添加了的图片
     public function actionAdd($goods_id){
         $goods = new GoodsAlbum();

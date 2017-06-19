@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\Brand;
 use backend\models\Goods;
 use backend\models\GoodsAlbum;
@@ -10,11 +11,22 @@ use backend\models\GoodsDayCount;
 use backend\models\GoodsIntro;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+use yii\web\Controller;
 use yii\web\Request;
 use xj\uploadify\UploadAction;
 
-class GoodsController extends PublicController
+class GoodsController extends Controller
 {
+    //使用过滤器
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'only'=>['index','add','update','delete'],
+            ]
+        ];
+    }
     //商品列表
     public function actionIndex()
     {

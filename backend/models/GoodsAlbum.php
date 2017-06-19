@@ -31,6 +31,7 @@ class GoodsAlbum extends \yii\db\ActiveRecord
         return [
 //            [['album_path', 'goods_id'], 'required'],
 //            [['goods_id'], 'integer'],
+            ['album','file','extensions'=>['jpg','png','gif']],
             [['album_path'], 'string', 'max' => 100],
         ];
     }

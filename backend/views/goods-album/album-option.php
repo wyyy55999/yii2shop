@@ -1,7 +1,9 @@
 <?php
 use kartik\file\FileInput;
 
-$form = \yii\bootstrap\ActiveForm::begin();
+$form = \yii\bootstrap\ActiveForm::begin([
+    'options'=>['enctype'=>'multipart/form-data']
+]);
 //album  这是模型中自己定义的
 echo $form->field($goods, 'album')->label('相册')->widget(FileInput::classname(), [
     'options' => ['multiple' => true],

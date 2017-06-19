@@ -1,3 +1,24 @@
+06.08  品牌的增删改查
+使用uploadify上传品牌logo：
+使用js将上传成功后的图片地址写入img标签
+$('#img_logo').attr("src",data.fileUrl).show();
+将上传成功后的图片地址写入logo字段(数据库的logo字段)
+$('#logo_path').val(data.fileUrl);
+模型中定义的存放图片的变量就可以不用了，规则也不需要再为该变量指定了
+在视图中，设置一个隐藏域，传递url到控制器
+echo $form->field($brand,'logo')->hiddenInput(['id' => 'logo_path']);
+然后在控制器中接收post传值
+
+06.09  文章和文章分类的增删改查
+1.因为文章分类要和文章进行关联，所以需要建立和文章分类表的关系
+return $this->hasOne(ArticleCategory::className(),['id'=>'article_category_id']);
+2.文章表需要使用垂直分表，要和文章详情关联，所以建立和文章详情表的关系
+return $this->hasOne(ArticleDetail::className(),['article_id'=>'id']);
+3.文章管理时使用到多模型同时输入，所以实例化、加载、验证等都需要执行两次（一次文章表，一次文章详情表）
+比如实例化：
+    $article = new Article();
+    $detail = new ArticleDetail();
+
 06.11  商品分类的增删改查  使用：嵌套集合   ztree插件
 1.关于商品分类表：lft左值  rgt右值  tree树值  parent_id父类id  depth层级
 2.关于增改：
@@ -46,8 +67,30 @@
     通过\Yii::$app->authManager->getRole($this->name)判断是否存在当前输入的角色
     不存在该角色则创建，\Yii::$app->authManager->createRole($this->name)
 3.权限和角色关联
+    通过\Yii::$app->authManager->addChild($role,$permission);将权限$permission加入到角色$role中
+4.用户和角色关联
+    \Yii::$app->authManager->assign($role,$id);将角色$role分配给user_id为$id的用户
+5.在修改时，无论是角色还是用户，为了方便，都可以先清除后再重新关联
+    例如，在修改角色权限时，先通过\Yii::$app->authManager->removeChildren($role);清除掉$role关联的所有权限，再创建权限，然后通过\Yii::$app->authManager->addChild($role,$permissionOfRole);将权限$permissionOfRole加入到角色$role中
+    注意，在给角色关联权限，给用户关联角色时，因为是多对多的关系，所以提交的是数据形式，应该遍历该数组添加
+关于权限和角色的方法：
+    \Yii::$app->authManager->getPermission($name)  获取到$name的权限
+    \Yii::$app->authManager->createPermission($this->name)  创建一个$name权限，返回一个permission对象
+    \Yii::$app->authManager->add($permission)  将$permission权限加入到数据库
+    \Yii::$app->authManager->update($name,$permission)  修改$name下的$permission权限，返回布尔值
+    \Yii::$app->authManager->getRole($name) 获取到$name的角色
+    \Yii::$app->authManager->createRole($name)  创建$name角色
+    \Yii::$app->authManager->addChild($role,$permission)  将$permission权限关联到$role角色下
+    \Yii::$app->authManager->removeChildren($role) 清除$role对应的所有权限
+    \Yii::$app->authManager->revokeAll($id)  清除$id对应的所有角色
 
-06.18  菜单
-注意：过滤器只能拦截url的访问
+06.18  菜单的增删改查
+因为过滤器只能拦截url的访问，用户在页面上还是能看到自己无权操作的管理，所以要使用菜单让无权管理的用户看不见菜单
+因为是二级菜单，所以要获取到当前的一级菜单的儿子，因为是一对多的关系，使用hasMany()
+return $this->hasMany(self::className(),['parent_id'=>'id']);
+从数据库读出所有的一级菜单(parent_id = 0)，然后遍历该数组，添加一级标签，在遍历时继续遍历它的儿子菜单数组，来添加二级菜单
+遍历二级菜单时，使用Yii::$app->user->can($child->url)来判断当前用户是否拥有$child->url这个权限，有才显示，没有就不显示二级菜单，当用户没有某一级菜单下的权限时，整个菜单(包括一级菜单)都不应该显示，所以使用empty($items['items'])来判断是否有子菜单，有子菜单才显示，通过$menuItems[] = $items将上面的所有菜单加入到导航栏
+需要注意一下，为了数据的唯一性，可以在config下的main.php的user组件中配置loginUrl参数，然后在其他地方使用Yii::$app->user->loginUrl调用即可
+
 
 

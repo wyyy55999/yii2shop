@@ -5,12 +5,15 @@
 </style>
 <?=\yii\bootstrap\Html::a('添加角色',['rbac/role-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
 <table class="table table-bordered table-hover">
-    <tr>
-        <th>角色名</th>
-        <th>角色描述</th>
-        <th>角色权限</th>
-        <th>操作</th>
-    </tr>
+    <thead>
+        <tr>
+            <th>角色名</th>
+            <th>角色描述</th>
+            <th>角色权限</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
     <?php foreach ($roles as $role): ?>
         <tr>
             <td width="150"><?=$role->name?></td>
@@ -26,7 +29,18 @@
             </td>
         </tr>
     <?php endforeach; ?>
+    </tbody>
 </table>
+<?php
+/**
+ * @var $this yii\web\View
+ */
+$this->registerCssFile('//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css');
+$this->registerJsFile('//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js',['depends'=>\yii\web\JqueryAsset::className()]);
+$this->registerJs('$(".table").DataTable({
+
+});')
+?>
 <script type="text/javascript">
     function notice() {
         return confirm('您确认删除吗？删除后数据无法恢复!');

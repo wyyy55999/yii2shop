@@ -13,10 +13,18 @@ use xj\uploadify\UploadAction;
 use crazyfd\qiniu\Qiniu;   //七牛云
 
 
-class BrandController extends PublicController
+class BrandController extends Controller
 {
-
-
+    //使用过滤器
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'only'=>['index','add','update','delete'],
+            ]
+        ];
+    }
     //品牌列表
     public function actionIndex(){
         //实例化分页工具条
