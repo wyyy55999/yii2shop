@@ -1,4 +1,4 @@
-<?=\yii\bootstrap\Html::a('添加权限',['rbac/permission-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
+<?=Yii::$app->user->can('rbac/permission-add') ? \yii\bootstrap\Html::a('添加权限',['rbac/permission-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;']) : ''?>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -14,8 +14,8 @@
                 <td><?=$permission->name?></td>
                 <td><?=$permission->description?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('修改',['rbac/permission-update','name'=>$permission->name])?> /
-                    <?=\yii\bootstrap\Html::a('删除',['rbac/permission-delete','name'=>$permission->name],['onclick'=>'return notice()'])?>
+                    <?=Yii::$app->user->can('rbac/permission-update') ? \yii\bootstrap\Html::a('修改',['rbac/permission-update','name'=>$permission->name]) : ''?> /
+                    <?=Yii::$app->user->can('rbac/permission-delete') ? \yii\bootstrap\Html::a('删除',['rbac/permission-delete','name'=>$permission->name],['onclick'=>'return notice()']) : ''?>
                 </td>
             </tr>
         <?php endforeach; ?>

@@ -46,7 +46,7 @@ echo \yii\bootstrap\Html::submitButton('搜索',['class'=>'btn btn-info','id'=>'
 \yii\bootstrap\ActiveForm::end();
 ?>
 
-<?=\yii\bootstrap\Html::a('新增',['goods/add'],['class'=>'btn btn-warning','style'=>'margin-bottom:8px;'])?>
+<?=Yii::$app->user->can('goods/add') ? \yii\bootstrap\Html::a('新增',['goods/add'],['class'=>'btn btn-warning','style'=>'margin-bottom:8px;']) : ''?>
 <table class="table table-bordered table-hover table-striped">
     <tr>
         <th>ID</th>

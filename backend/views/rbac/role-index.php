@@ -3,7 +3,7 @@
         text-align: center;
     }
 </style>
-<?=\yii\bootstrap\Html::a('添加角色',['rbac/role-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
+<?=Yii::$app->user->can('rbac/role-add') ? \yii\bootstrap\Html::a('添加角色',['rbac/role-add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;']) : ''?>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -24,8 +24,8 @@
                 }
                 ?></td>
             <td width="100" id="option_td">
-                <?=\yii\bootstrap\Html::a('修改',['rbac/role-update','name'=>$role->name])?> /
-                <?=\yii\bootstrap\Html::a('删除',['rbac/role-delete','name'=>$role->name],['onclick'=>'return notice()'])?>
+                <?=Yii::$app->user->can('rbac/role-update') ? \yii\bootstrap\Html::a('修改',['rbac/role-update','name'=>$role->name]) : ''?> /
+                <?=Yii::$app->user->can('rbac/role-delete') ? \yii\bootstrap\Html::a('删除',['rbac/role-delete','name'=>$role->name],['onclick'=>'return notice()']) : ''?>
             </td>
         </tr>
     <?php endforeach; ?>

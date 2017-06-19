@@ -10,7 +10,7 @@
         vertical-align: middle!important;
     }
 </style>
-<?=\yii\bootstrap\Html::a('新增',['user/add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
+<?=Yii::$app->user->can('user/update') ? \yii\bootstrap\Html::a('新增',['user/add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;']) : ''?>
 <!--\yii\bootstrap\Html::a('注销登录',['user/logout'],['class'=>'btn btn-warning','style'=>'margin-bottom:8px;margin-left:8px;'])  -->
 <table class="table table-bordered table-hover table-striped">
     <tr>

@@ -92,7 +92,7 @@ class UserController extends \yii\web\Controller
                 $cur_admin->last_login_ip = \Yii::$app->request->userIP;
                 $cur_admin->save(false);
                 \Yii::$app->session->setFlash('warning','登录成功，您的登录时间为 '.date('Y-m-d H:i:s',time()));
-                return $this->redirect(['user/index']);
+                return $this->redirect(['user/public-index']);
             }
         }
         return $this->render('login',['user_login'=>$user_login]);
@@ -126,5 +126,9 @@ class UserController extends \yii\web\Controller
             return $this->redirect(['user/login']);
         }
         return $this->render('change-pwd',['admin'=>$admin]);
+    }
+    //公共首页
+    public function actionPublicIndex(){
+        return $this->render('public-index');
     }
 }

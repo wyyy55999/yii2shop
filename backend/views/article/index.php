@@ -7,7 +7,7 @@
         vertical-align: middle!important;
     }
 </style>
-<?=\yii\bootstrap\Html::a('新增',['article/add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;'])?>
+<?=Yii::$app->user->can('article/add') ? \yii\bootstrap\Html::a('新增',['article/add'],['class'=>'btn btn-info','style'=>'margin-bottom:8px;']) : ''?>
 <table class="table table-bordered table-hover table-striped">
     <tr>
         <th>ID</th>
