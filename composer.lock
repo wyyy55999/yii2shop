@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a73beab1df48e9e13ed5770f54bc19e",
+    "content-hash": "d0c055c7c324e7157f64a9283eeece63",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -266,6 +266,49 @@
                 "markdown-extra"
             ],
             "time": "2016-09-14T20:40:20+00:00"
+        },
+        {
+            "name": "chenkby/yii2-region",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chenkby/yii2-region.git",
+                "reference": "b377af6986f0372bb0707512e52a7b54f7d323c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/chenkby/yii2-region/b377af6986f0372bb0707512e52a7b54f7d323c2.zip",
+                "reference": "b377af6986f0372bb0707512e52a7b54f7d323c2",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-widget",
+            "autoload": {
+                "psr-4": {
+                    "chenkby\\region\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "ChenGuanQun",
+                    "email": "99912250@qq.com"
+                }
+            ],
+            "description": "Yii2中国省市区三级联动",
+            "keywords": [
+                "city",
+                "district",
+                "province",
+                "region",
+                "yii2"
+            ],
+            "time": "2017-02-22 07:06:12"
         },
         {
             "name": "crazyfd/yii2-qiniu",
@@ -3363,7 +3406,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "crazyfd/yii2-qiniu": 20,
-        "kartik-v/yii2-widget-fileinput": 20
+        "kartik-v/yii2-widget-fileinput": 20,
+        "chenkby/yii2-region": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

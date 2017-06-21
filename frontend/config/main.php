@@ -42,6 +42,8 @@ return [
             'showScriptName' => false,
             'suffix'=>'.html',  //伪静态后缀
             'rules' => [
+                "<controller:\w+>/<id:\d+>"=>"<controller>/view",
+                "<controller:\w+>/<action:\w+>"=>"<controller>/<action>"
             ],
         ],
     ],
