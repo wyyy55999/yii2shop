@@ -30,6 +30,8 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
     public $code;
     //阅读并同意
     public $read_agree;
+    //手机验证码
+    public $sms_code;
     /**
      * @inheritdoc
      */
@@ -44,7 +46,7 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password','repassword','email', 'tel'], 'required'],
+            [['username', 'password','repassword','email', 'tel','sms_code'], 'required'],
             [['last_login_time', 'last_login_ip', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username'], 'string', 'max' => 50],
             [['auth_key'], 'string', 'max' => 32],
@@ -57,6 +59,8 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
             ['username','unique','message'=>'该用户名已被使用'],
             ['email','unique','message'=>'该邮箱已被使用'],
             ['read_agree','safe'],
+            //验证手机号码
+            ['sms_code','validateSms'],
         ];
     }
 
@@ -80,7 +84,8 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
             'created_at' => '添加时间',
             'updated_at' => '修改时间',
             'code'=>'验证码',
-            'read_agree'=>'阅读并同意'
+            'read_agree'=>'',
+            'sms_code'=>'手机验证码'
         ];
     }
     //创建时间
@@ -93,17 +98,24 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
     }
     //加盐加密  给一个唯一的auth_key
     public function registerSave(){
-        if($this->read_agree){
+        //if($this->read_agree){
             if($this->repassword == $this->password){
                 $this->status = 1;  //设置状态默认为正常
                 $this->auth_key = Yii::$app->security->generateRandomString();
                 $this->password_hash = Yii::$app->security->generatePasswordHash($this->password);
                 return true;
             }
-        }
+        //}
         return false;
     }
-
+    //验证手机号
+    public function validateSms(){
+        //根据set的key  获取value
+        $tel_value = Yii::$app->cache->get('tel_'.$this->tel);
+        if(!$tel_value || $this->sms_code != $tel_value){  //如果不存在value或者当前输入的验证码不等于设置的验证码  就报错
+            $this->addError('sms_code','验证码有误，请重新输入');
+        }
+    }
     /**
      * Finds an identity by the given ID.
      * @param string|int $id the ID to be looked for

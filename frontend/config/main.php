@@ -46,6 +46,14 @@ return [
                 "<controller:\w+>/<action:\w+>"=>"<controller>/<action>"
             ],
         ],
+        //配置短信组件
+        'sms'=>[
+            'class'=>\frontend\components\Sms::className(),
+             'app_key'=>'24479675',
+             'app_secret'=>'e5168ed9e6006dcd1f129843b7959f82',
+             'sign_name'=>'姚倩的网站',
+             'template_code'=>'SMS_71585182',
+        ],
     ],
     'params' => $params,
 ];

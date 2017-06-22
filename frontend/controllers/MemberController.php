@@ -4,6 +4,11 @@ namespace frontend\controllers;
 
 use frontend\models\Member;
 use frontend\models\MemberLoginForm;
+use Flc\Alidayu\Client;
+use Flc\Alidayu\App;
+use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
+use Flc\Alidayu\Requests\IRequest;
+use yii\helpers\Json;
 
 class MemberController extends \yii\web\Controller
 {
@@ -16,7 +21,7 @@ class MemberController extends \yii\web\Controller
                 if($member_reg->registerSave()){
                     $member_reg->save(false);
                     \Yii::$app->session->setFlash('success','注册成功');
-                    return $this->redirect(['member/test']);
+                    return $this->redirect(['member/login']);
                 }
             }
         }
@@ -48,7 +53,27 @@ class MemberController extends \yii\web\Controller
         //var_dump(\Yii::$app->user->identity);
         return $this->renderPartial('index');
     }
-    //测试
+    //发送验证短信
+    public function actionSendSms(){
+        //获取电话
+        $tel = \Yii::$app->request->post('tel');
+        if(!preg_match('/^1[34578]\d{9}$/',$tel) && $tel != null){
+            echo '手机号有误';
+            exit;
+        }
+        //发送短信
+        $code = rand(100000,999999);
+        //$result = \Yii::$app->sms->setTel($tel)->setParam(['code'=>$code])->send();
+        $result = 1;
+        if($result){
+            //如果发送成功，保存验证码到cache缓存  /  redis   /  session  /  mysql
+            \Yii::$app->cache->set('tel_'.$tel,$code,5*60);//第三个参数是过期时间  也就是验证码超过五分钟就无效
+            echo Json::encode(['msg'=>'success','code'=>$code]);
+        }else{
+            echo Json::encode(['msg'=>'fail','code'=>$code]);
+        }
+    }
+    //测试登录
     public function actionTest(){
         if(\Yii::$app->user->isGuest){
             echo '游客';
@@ -57,5 +82,37 @@ class MemberController extends \yii\web\Controller
             echo '登录成功';
         }
     }
+    //测试短信插件
+    public function actionTestMsg(){
+       /*// 配置信息
+        $config = [
+            'app_key'    => '24479675',
+            'app_secret' => 'e5168ed9e6006dcd1f129843b7959f82',
+            // 'sandbox'    => true,  // 是否为沙箱环境，默认false
+        ];
 
+
+        // 使用方法一
+        $client = new Client(new App($config));
+        $req    = new AlibabaAliqinFcSmsNumSend;
+        $code = rand(100000, 999999);
+        $req->setRecNum('18208132747')   //设置发给某用户
+            ->setSmsParam([
+                'code' => $code  //${code}
+            ])
+            ->setSmsFreeSignName('姚倩的网站')//设置短信签名，必须是已审核的
+            ->setSmsTemplateCode('SMS_71585182');//设置短信模版id  必须审核通过
+
+        $resp = $client->execute($req);
+        var_dump($resp);
+        var_dump($code);*/
+        $code = rand(100000, 999999);
+        $res = \Yii::$app->sms->setTel(18208132747)->setParam(['code'=>$code])->send();
+        var_dump($res);
+        if($res){
+            echo '发送成功，验证码是：'.$code;
+        }else{
+            echo '发送失败';
+        }
+    }
 }
