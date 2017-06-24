@@ -18,13 +18,12 @@ class CategoryWidget extends \yii\base\Widget
         //获取redis中的分类信息
         $category_html = $redis->get('category_html');
         //判断是否存在分类信息  如果不存在  也就是为空  那么就创建redis
-        if($category_html == null){
+        if($category_html == null){  //从数据库读取
             $goods_cates = GoodsCategory::findAll(['parent_id'=>0]);
             $category_html = $this->renderFile('@app/widgets/views/category.php',['goods_cates'=>$goods_cates]);
             //设置redis
-            $redis->set('category_html',$category_html);
+            $redis->set('category_html',$category_html,3600);
         }
-        $redis->expire('category_html',10);
         return $category_html;
     }
 }

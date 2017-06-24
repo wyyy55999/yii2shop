@@ -84,4 +84,8 @@ class GoodsCategory extends \yii\db\ActiveRecord
     public function getParentname(){
         return $this->hasOne(GoodsCategory::className(),['id'=>'parent_id']);
     }
+    //获取子分类
+    public function getChildren(){
+        return $this->hasMany(self::className(),['parent_id'=>'id']);
+    }
 }

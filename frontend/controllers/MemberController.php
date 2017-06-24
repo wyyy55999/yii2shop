@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Cart;
 use frontend\models\Member;
 use frontend\models\MemberLoginForm;
 use Flc\Alidayu\Client;
@@ -9,6 +10,7 @@ use Flc\Alidayu\App;
 use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
 use Flc\Alidayu\Requests\IRequest;
 use yii\helpers\Json;
+use yii\web\NotFoundHttpException;
 
 class MemberController extends \yii\web\Controller
 {
@@ -32,12 +34,37 @@ class MemberController extends \yii\web\Controller
         $member_login = new MemberLoginForm();
         if(\Yii::$app->request->isPost){
             if($member_login->load(\Yii::$app->request->post()) && $member_login->validate()){
+                //获取到cookie中的数据
+                $cookies = \Yii::$app->request->cookies;
+                $cookie = $cookies->get('cart');
+                if($cookie == null){  //如果购物车没有数据  那就是空数组
+                    $cart = [];
+                }else{
+                    $cart = unserialize($cookie->value);   //这是购物车的数据
+                }
+                //遍历cart数组  存入数据库
+                foreach ($cart as $goods_id=>$amount){
+                    $cart_model = new Cart();
+                    $member_goods = Cart::findOne(['member_id'=>\Yii::$app->user->id,'goods_id'=>$goods_id]);
+                    if($member_goods){
+                        $member_goods->amount += $amount;
+                        $member_goods->save(false);
+                    }else{
+                        $cart_model->member_id = \Yii::$app->user->id;
+                        $cart_model->goods_id = $goods_id;
+                        $cart_model->amount = $amount;
+                        $cart_model->save(false);
+                    }
+                }
+                $cookies = \Yii::$app->response->cookies;
+                $cookies->remove('cart');  //清除cookie中的cart
+                //同步到数据库
                 $current_member = Member::findOne(['username'=>$member_login->username]);
                 //成功则保存当前时间和ip
                 $current_member->last_login_time = time();
                 $current_member->last_login_ip =  ip2long(\Yii::$app->request->userIP);
                 $current_member->save(false);
-                return $this->redirect(['member/test']);
+                return $this->redirect(['index/index']);
             }
         }
         return $this->render('login',['member_login'=>$member_login]);
@@ -45,7 +72,7 @@ class MemberController extends \yii\web\Controller
     //注销登录
     public function actionLogout(){
         \Yii::$app->user->logout();
-        return $this->render('index');
+        return $this->redirect(['member/login']);
     }
     //首页
     public function actionIndex()

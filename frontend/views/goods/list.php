@@ -1,3 +1,52 @@
+<!-- 导航条部分 start -->
+<div class="nav w1210 bc mt10">
+    <!--  商品分类部分 start-->
+    <div class="category fl cat1"> <!-- 非首页，需要添加cat1类 -->
+        <div class="cat_hd off">  <!-- 注意，首页在此div上只需要添加cat_hd类，非首页，默认收缩分类时添加上off类，并将cat_bd设置为不显示，鼠标滑过时展开菜单则将off类换成on类 -->
+            <h2>全部商品分类</h2>
+            <em></em>
+        </div>
+
+        <div class="cat_bd none">
+            <?php foreach ($goods_cates as $k=>$goods_cate): //遍历一级分类?>
+            <div class="cat <?=($k==0) ? 'item1':''?>">
+                <h3><?=\yii\helpers\Html::a($goods_cate->name,['goods/list','goods_cate_id'=>$goods_cate->id])?> <b></b></h3>
+                <div class="cat_detail none">
+                    <?php foreach ($goods_cate->children as $k1=>$child): //遍历二级分类?>
+                    <dl <?=($k1==0) ? 'class="dl_1st"':''?>>
+                        <dt><?=\yii\helpers\Html::a($child->name,['goods/list','goods_cate_id'=>$child->id])?></dt>
+                        <dd>
+                            <?php foreach ($child->children as $third): //遍历三级分类?>
+                                <?=\yii\helpers\Html::a($third->name,['goods/list','goods_cate_id'=>$third->id])?>
+                            <?php endforeach; ?>
+                        </dd>
+                    </dl>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+    <!--  商品分类部分 end-->
+
+    <div class="navitems fl">
+        <ul class="fl">
+            <li class="current"><a href="">首页</a></li>
+            <li><a href="">电脑频道</a></li>
+            <li><a href="">家用电器</a></li>
+            <li><a href="">品牌大全</a></li>
+            <li><a href="">团购</a></li>
+            <li><a href="">积分商城</a></li>
+            <li><a href="">夺宝奇兵</a></li>
+        </ul>
+        <div class="right_corner fl"></div>
+    </div>
+</div>
+<!-- 导航条部分 end -->
+</div>
+<!-- 头部 end-->
+
+<div style="clear:both;"></div>
 <!-- 列表主体 start -->
 <div class="list w1210 bc mt10">
     <!-- 面包屑导航 start -->
@@ -264,17 +313,27 @@
         <div class="goodslist mt10">
             <ul>
                 <?php
-                foreach ($goodses as $goods):
-                ?>
+
+                foreach ($goodses as $all_goods):
+                    if(is_array($all_goods)):
+                        foreach ($all_goods as $goods){
+                    ?>
                 <li>
                     <dl>
-                        <dt><a href=""><?=\yii\helpers\Html::img('http://admin.yii2shop.com'.$goods->logo)?></a></dt>
+                        <dt>
+                            <a href=""><?=\yii\helpers\Html::img('http://admin.yii2shop.com'.$goods->logo)?></a>
+                        </dt>
                         <dd><?=\yii\helpers\Html::a($goods->name,['goods/detail','goods_id'=>$goods->id])?></dd>
                         <dd><strong><?=$goods->shop_price?></strong></dd>
                         <dd><a href=""><em>已有10人评价</em></a></dd>
                     </dl>
                 </li>
-                <?php endforeach; ?>
+                <?php
+                        }
+                    endif;
+                ?>
+                <?php endforeach;?>
+
             </ul>
         </div>
         <!-- 商品列表 end-->

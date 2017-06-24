@@ -1,6 +1,8 @@
 <div class="cat_bd">
     <?php
     use yii\helpers\Html;
+//    $redis = new Redis();
+//    echo $redis->get('category_html') ? 'redis' : 'mysql';
     foreach ($goods_cates as $k=>$goods_cate):
         ?>
         <div class="cat <?=($k==0)? 'item1':'';?>">
