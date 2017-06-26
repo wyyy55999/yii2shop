@@ -21,6 +21,7 @@ class m170621_015549_create_address_table extends Migration
             'detail_address'=>$this->string(100)->notNull()->comment('详细地址'),
             'tel'=>$this->char(11)->notNull()->comment('手机号码'),
             'is_default'=>$this->smallInteger(1)->defaultValue(0)->comment('是否为默认地址'),
+            'member_id'=>$this->integer()->notNull()->comment('用户id')
         ]);
     }
 

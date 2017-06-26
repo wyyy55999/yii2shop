@@ -57,7 +57,7 @@ class Address extends \yii\db\ActiveRecord
 
     //保存添加
     public function AddSave(){
-        $addresses = Address::find()->all();
+        $addresses = Address::find()->where('member_id='.Yii::$app->user->id)->all();
         if($addresses){
             if($this->is_default == 1) {
                 foreach ($addresses as $address){
@@ -77,4 +77,16 @@ class Address extends \yii\db\ActiveRecord
         return ArrayHelper::map($result, 'id', 'name');
     }
 
+    //获取省  名字不能和address表中的一致  否则获取时会被认为是在获取数据表的province
+    public function getPro(){
+        return $this->hasOne(Locations::className(),['id'=>'province']);
+    }
+    //获取市
+    public function getCit(){
+        return $this->hasOne(Locations::className(),['id'=>'city']);
+    }
+    //获取区县
+    public function getAre(){
+        return $this->hasOne(Locations::className(),['id'=>'area']);
+    }
 }

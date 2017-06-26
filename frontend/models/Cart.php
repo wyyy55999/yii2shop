@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use backend\models\Goods;
 use Yii;
 
 /**

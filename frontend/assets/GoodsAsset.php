@@ -15,17 +15,20 @@ class GoodsAsset extends AssetBundle
         'style/list.css',  //列表
         'style/goods.css',  //商品详情
         'style/cart.css',  //购物车
+	    'style/fillin.css', //订单核对
+        'style/success.css', //交易成功
         'style/common.css',
         'style/bottomnav.css',
         'style/footer.css',
         'style/jqzoom.css'
     ];
     public $js = [
-        'js/jquery-1.8.3.min.js',
+//        'js/jquery-1.8.3.min.js',
         'js/header.js',
         'js/goods.js',
         'js/jqzoom-core.js',
         'js/cart1.js',  //购物车
+        'js/cart2.js',//订单核对
     ];
     public $depends = [
         'yii\web\JqueryAsset',

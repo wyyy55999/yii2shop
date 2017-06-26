@@ -19,7 +19,7 @@ class m170624_021614_create_order_table extends Migration
             'province'=>$this->string(20)->notNull()->comment('省'),
             'city'=>$this->string(20)->notNull()->comment('市'),
             'area'=>$this->string(20)->notNull()->comment('区县'),
-            'addree'=>$this->string(255)->notNull()->comment('详细地址'),
+            'address'=>$this->string(255)->notNull()->comment('详细地址'),
             'tel'=>$this->char(11)->notNull()->comment('电话号码'),
             'delivery_id'=>$this->integer()->comment('配送方式id'),
             'delivery_name'=>$this->string(50)->comment('配送方式名称'),

@@ -44,29 +44,12 @@ use yii\helpers\Html;
     </div>
 </div>
 <!-- 顶部导航 end -->
-
-<div style="clear:both;"></div>
-
-<!-- 页面头部 start -->
-<div class="header w990 bc mt15">
-    <div class="logo w990">
-        <h2 class="fl"><a href="index.html"><?=\yii\helpers\Html::img('@web/images/logo.png')?></a></h2>
-        <div class="flow fr">
-            <ul>
-                <li class="cur">1.我的购物车</li>
-                <li>2.填写核对订单信息</li>
-                <li>3.成功提交订单</li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- 页面头部 end -->
-
 <div style="clear:both;"></div>
 
 <?=$content?>
 
 <div style="clear:both;"></div>
+
 <!-- 底部版权 start -->
 <div class="footer w1210 bc mt15">
     <p class="links">
@@ -86,10 +69,10 @@ use yii\helpers\Html;
         © 2005-2013 京东网上商城 版权所有，并保留所有权利。  ICP备案证书号:京ICP证070359号
     </p>
     <p class="auth">
-        <a href=""><?=\yii\helpers\Html::img('@web/images/xin.png')?></a>
-        <a href=""><?=\yii\helpers\Html::img('@web/images/kexin.jpg')?></a>
-        <a href=""><?=\yii\helpers\Html::img('@web/images/police.jpg')?></a>
-        <a href=""><?=\yii\helpers\Html::img('@web/images/beian.gif')?></a>
+        <a href=""><?=Html::img('@web/images/xin.png')?></a>
+        <a href=""><?=Html::img('@web/images/kexin.jpg')?></a>
+        <a href=""><?=Html::img('@web/images/police.jpg')?></a>
+        <a href=""><?=Html::img('@web/images/beian.gif')?></a>
     </p>
 </div>
 <!-- 底部版权 end -->

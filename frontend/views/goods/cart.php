@@ -37,8 +37,14 @@
         </tfoot>
     </table>
     <div class="cart_btn w990 bc mt10">
-        <a href="" class="continue">继续购物</a>
-        <a href="" class="checkout">结 算</a>
+        <?=\yii\helpers\Html::a('继续购物',['index/index'],['class'=>'continue'])?>
+        <?php
+            if(Yii::$app->user->isGuest){
+                echo \yii\helpers\Html::a('结算',['member/login'],['class'=>'checkout']);
+            }else{
+                echo \yii\helpers\Html::a('结算',['order/fillin'],['class'=>'checkout']);
+            }
+        ?>
     </div>
 </div>
 <!-- 主体部分 end -->

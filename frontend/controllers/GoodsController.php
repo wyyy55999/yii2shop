@@ -141,7 +141,8 @@ class GoodsController extends Controller
             $cur_member_id = \Yii::$app->user->id;
             $cart_member = Cart::findAll(['member_id'=>$cur_member_id]);
             if($cart_member == null){
-                throw new NotFoundHttpException('该用户不存在');
+                $goods_models = [];
+                return $this->render('cart',['goods_models'=>$goods_models]);
             }
             $goods_models = [];
             foreach ($cart_member as $goods_info){

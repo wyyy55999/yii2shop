@@ -34,6 +34,12 @@ class MemberController extends \yii\web\Controller
         $member_login = new MemberLoginForm();
         if(\Yii::$app->request->isPost){
             if($member_login->load(\Yii::$app->request->post()) && $member_login->validate()){
+                $current_member = Member::findOne(['username'=>$member_login->username]);
+                //成功则保存当前时间和ip
+                $current_member->last_login_time = time();
+                $current_member->last_login_ip =  ip2long(\Yii::$app->request->userIP);
+                $current_member->save(false);
+                //同步到数据库
                 //获取到cookie中的数据
                 $cookies = \Yii::$app->request->cookies;
                 $cookie = $cookies->get('cart');
@@ -58,12 +64,6 @@ class MemberController extends \yii\web\Controller
                 }
                 $cookies = \Yii::$app->response->cookies;
                 $cookies->remove('cart');  //清除cookie中的cart
-                //同步到数据库
-                $current_member = Member::findOne(['username'=>$member_login->username]);
-                //成功则保存当前时间和ip
-                $current_member->last_login_time = time();
-                $current_member->last_login_ip =  ip2long(\Yii::$app->request->userIP);
-                $current_member->save(false);
                 return $this->redirect(['index/index']);
             }
         }
@@ -71,7 +71,7 @@ class MemberController extends \yii\web\Controller
     }
     //注销登录
     public function actionLogout(){
-        \Yii::$app->user->logout();
+        @\Yii::$app->user->logout();
         return $this->redirect(['member/login']);
     }
     //首页
