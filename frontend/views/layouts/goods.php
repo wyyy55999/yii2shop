@@ -35,7 +35,13 @@ use yii\helpers\Html;
                         ?>
                     </li>
                     <li class="line">|</li>
-                    <li>我的订单</li>
+                    <li><?php
+                        if(Yii::$app->user->isGuest){
+                            echo '我的订单';
+                        }else{
+                            echo Html::a('我的订单',['order/detail']);
+                        }?>
+                    </li>
                     <li class="line">|</li>
                     <li>客户服务</li>
 
@@ -56,8 +62,8 @@ use yii\helpers\Html;
             <div class="search fl">
                 <div class="search_form">
                     <div class="form_left fl"></div>
-                    <form action="" name="serarch" method="get" class="fl">
-                        <input type="text" class="txt" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
+                    <form action="<?=\yii\helpers\Url::to(['goods/list'])?>" name="serarch" method="get" class="fl">
+                        <input type="text" class="txt" value="请输入商品关键字" name="keywords" /><input type="submit" class="btn" value="搜索" />
                     </form>
                     <div class="form_right fl"></div>
                 </div>
@@ -89,7 +95,13 @@ use yii\helpers\Html;
                         <div class="uclist mt10">
                             <ul class="list1 fl">
                                 <li><a href="">用户信息></a></li>
-                                <li><a href="">我的订单></a></li>
+                                <li><?php
+                                    if(Yii::$app->user->isGuest){
+                                        echo '我的订单';
+                                    }else{
+                                        echo Html::a('我的订单',['order/detail']);
+                                    }?>
+                                </li>
                                 <li><a href="">收货地址></a></li>
                                 <li><a href="">我的收藏></a></li>
                             </ul>
@@ -231,6 +243,8 @@ use yii\helpers\Html;
         </p>
     </div>
     <!-- 底部版权 end -->
+<?php $this->endBody() ?>
+        <!-- 底部版权 end -->
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -313,7 +313,6 @@
         <div class="goodslist mt10">
             <ul>
                 <?php
-
                 foreach ($goodses as $all_goods):
                     if(is_array($all_goods)):
                         foreach ($all_goods as $goods){

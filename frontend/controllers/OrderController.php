@@ -71,7 +71,8 @@ class OrderController extends \yii\web\Controller
                         //获取商品库存
                         $goods_stock = Goods::findOne(['id'=>$goods->id]);
                         if($goods_stock->stock < Cart::findOne(['goods_id'=>$goods->id])->amount){
-                            throw new NotFoundHttpException($goods_stock->name.'库存不足');
+                            //throw new NotFoundHttpException($goods_stock->name.'库存不足');
+                            throw new Exception($goods_stock->name.'库存不足');
                         }else{
                             //库存够的时候就用商品库存 - 购物车中该商品的数量
                             $goods_stock->stock = $goods_stock->stock - Cart::findOne(['goods_id'=>$goods->id])->amount;
@@ -114,5 +115,24 @@ class OrderController extends \yii\web\Controller
     //订单提交成功
     public function actionSuccess(){
         return $this->render('success');
+    }
+    //订单详情
+    public function actionDetail(){
+        $this->layout = 'goods';
+        //获取所有订单
+        $orders = Order::find()->where('member_id='.\Yii::$app->user->id)->andWhere('status>0')->all();
+        return $this->render('detail',['orders'=>$orders]);
+    }
+    //订单商品详情
+    public function actionGoodsDetail($order_id){
+        $order_goods = OrderGoods::findAll(['order_id'=>$order_id]);
+        return $this->render('goods-detail',['order_goods'=>$order_goods]);
+    }
+    //确认收货
+    public function actionConfirm($order_id){
+        $order = Order::findOne(['id'=>$order_id]);
+        $order->status = 4;
+        $order->save(false);
+        return $this->redirect(['order/detail']);
     }
 }

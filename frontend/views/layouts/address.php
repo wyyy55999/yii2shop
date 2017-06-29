@@ -35,7 +35,13 @@ use yii\helpers\Html;
                     ?>
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><?php
+                    if(Yii::$app->user->isGuest){
+                        echo '我的订单';
+                    }else{
+                        echo Html::a('我的订单',['order/detail']);
+                    }?>
+                </li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 
@@ -89,7 +95,12 @@ use yii\helpers\Html;
                     <div class="uclist mt10">
                         <ul class="list1 fl">
                             <li><a href="">用户信息></a></li>
-                            <li><a href="">我的订单></a></li>
+                            <li><?php
+                                if(Yii::$app->user->isGuest){
+                                    echo '我的订单';
+                                }else{
+                                    echo Html::a('我的订单',['order/detail']);
+                                }?></li>
                             <li><a href="">收货地址></a></li>
                             <li><a href="">我的收藏></a></li>
                         </ul>
@@ -444,7 +455,13 @@ use yii\helpers\Html;
         <div class="menu_wrap">
             <dl>
                 <dt>订单中心 <b></b></dt>
-                <dd><b>.</b><a href="">我的订单</a></dd>
+                <dd><b>.</b><?php
+                    if(Yii::$app->user->isGuest){
+                        echo '我的订单';
+                    }else{
+                        echo Html::a('我的订单',['order/detail']);
+                    }?>
+                </dd>
                 <dd><b>.</b><a href="">我的关注</a></dd>
                 <dd><b>.</b><a href="">浏览历史</a></dd>
                 <dd><b>.</b><a href="">我的团购</a></dd>

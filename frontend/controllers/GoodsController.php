@@ -5,9 +5,12 @@ namespace frontend\controllers;
 use backend\models\Goods;
 use backend\models\GoodsAlbum;
 use backend\models\GoodsCategory;
+use frontend\components\SphinxClient;
 use frontend\models\Cart;
 use frontend\models\Member;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
@@ -15,30 +18,70 @@ use yii\web\NotFoundHttpException;
 class GoodsController extends Controller
 {
     public $layout = 'goods';
-
     //商品列表和分类
-    public function actionList($goods_cate_id){
-        $all_cates = [];  //所有的子孙分类
-        $goodses = []; //所有商品
-        //先查找自己的商品
-        $goodses[] = Goods::find()->where('goods_category_id='.$goods_cate_id)->all();
-        //再查自己是否有的子孙
-        $sons = GoodsCategory::findAll(['parent_id'=>$goods_cate_id]);
-        if($sons){  //有儿子就找孙子
-            $all_cates[] = $sons;
-            foreach ($sons as $son){
-                $grandSon = GoodsCategory::findAll(['parent_id'=>$son->id]);
-                if($grandSon){
-                    $all_cates[] = $grandSon;
+    public function actionList($goods_cate_id = null){
+        if($goods_cate_id != null){
+            $all_cates = [];  //所有的子孙分类
+            $goodses = []; //所有商品
+            //先查找自己的商品
+            $goodses[] = Goods::find()->where('goods_category_id='.$goods_cate_id)->all();
+            //再查自己是否有的子孙
+            $sons = GoodsCategory::findAll(['parent_id'=>$goods_cate_id]);
+            if($sons){  //有儿子就找孙子
+                $all_cates[] = $sons;
+                foreach ($sons as $son){
+                    $grandSon = GoodsCategory::findAll(['parent_id'=>$son->id]);
+                    if($grandSon){
+                        $all_cates[] = $grandSon;
+                    }
                 }
             }
-        }
-        if($all_cates){  //如果存在子孙分类
-            foreach ($all_cates as $cates){
-                if(is_array($cates)){
-                    foreach ($cates as $cate){
-                        $goodses[] = Goods::find()->where('goods_category_id='.$cate->id)->all();
+            if($all_cates){  //如果存在子孙分类
+                foreach ($all_cates as $cates){
+                    if(is_array($cates)){
+                        foreach ($cates as $cate){
+                            $goodses[] = Goods::find()->where('goods_category_id='.$cate->id)->all();
+                        }
                     }
+                }
+            }
+        }else {
+            //sphinx中文分词搜索
+            if ($keywords = \Yii::$app->request->get('keywords')) {
+                $query = Goods::find();
+                $cl = new SphinxClient();
+                $cl->SetServer('127.0.0.1', 9312);
+                $cl->SetConnectTimeout(10);
+                $cl->SetArrayResult(true);
+                $cl->SetMatchMode(SPH_MATCH_ALL);
+                $cl->SetLimits(0, 1000);
+                $res = $cl->Query($keywords, 'mysql');//shopstore_search
+                $goodses = [];
+                if (!isset($res['matches'])) {  //如果没有匹配的商品
+                    $goodses[] = $query->where(['id' => 0])->all();
+                } else {  //如果有匹配的商品
+                    //获取商品id
+                    $ids = ArrayHelper::map($res['matches'], 'id', 'id');
+                    $goodses[] = $query->where(['in', 'id', $ids])->all();
+                }
+
+                /*$pager = new Pagination([
+                    'totalCount'=>$query->count(),
+                    'pageSize'=>5
+                ]);
+                $goodses[] = $query->limit($pager->limit)->offset($pager->offset)->all();*/
+                $keywords = array_keys($res['words']);
+                $options = [
+                    'before_match' => '<span style="color:red;">',
+                    'after_match' => '</span>',
+                    'chunk_separator' => '...',
+                    'limit' => 80, //如果内容超过80个字符，就使用...隐藏多余的的内容
+                ];
+                //关键字高亮
+                foreach($goodses[0] as $index=>$item) {
+                    //使用的索引不能写*，关键字可以使用空格、逗号等符号做分隔，放心，sphinx很智能，会给你拆分的
+                    $name = $cl->BuildExcerpts([$item->name], 'mysql', implode(',', $keywords), $options);
+                    $goodses[0][$index]->name = $name[0];
                 }
             }
         }

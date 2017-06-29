@@ -35,7 +35,14 @@ use yii\helpers\Html;
                     ?>
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><?php
+                    if(Yii::$app->user->isGuest){
+                        echo '我的订单';
+                    }else{
+                        echo Html::a('我的订单',['order/detail']);
+                    }
+                    ?>
+                </li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 

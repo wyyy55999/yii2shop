@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\components\RbacFilter;
+use backend\components\SphinxClient;
 use backend\models\Brand;
 use backend\models\Goods;
 use backend\models\GoodsAlbum;
@@ -273,5 +274,22 @@ class GoodsController extends Controller
             $goods->scenario = Goods::SCENARIO_SEARCH;
             return $this->render('index',['goodses'=>$goodses,'goods'=>$goods,'brands'=>$brand,'goods_cates'=>$goods_cates]);
         }
+    }
+    //测试sphinx
+    public function actionTestSphinx(){
+        $cl = new SphinxClient();
+        $cl->SetServer ( '127.0.0.1', 9312);
+        //$cl->SetServer ( '10.6.0.6', 9312);
+        //$cl->SetServer ( '10.6.0.22', 9312);
+        //$cl->SetServer ( '10.8.8.2', 9312);
+        $cl->SetConnectTimeout ( 10 );
+        $cl->SetArrayResult ( true );
+        $cl->SetMatchMode ( SPH_MATCH_ALL);  //==>匹配模式
+        //$cl->SetMatchMode ( SPH_MATCH_EXTENDED2);
+        $cl->SetLimits(0, 1000);
+        $info = '华为手机';
+        $res = $cl->Query($info, 'mysql');//shopstore_search
+        //print_r($cl);
+        var_dump($res);
     }
 }

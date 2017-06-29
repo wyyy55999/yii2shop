@@ -1,7 +1,18 @@
 <?php
 /* @var $this yii\web\View */
-$this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryAsset::className()])
+$this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryAsset::className()]);
 ?>
+<style type="text/css">
+    table{
+        border: none;
+    }
+    .need_left td{
+        text-align: left!important;
+    }
+    #need_right td{
+        text-align: right!important;
+    }
+</style>
 <!-- 页面头部 start -->
 <div class="header w990 bc mt15">
     <div class="logo w990">
@@ -32,11 +43,18 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
         <div class="address">
             <h3>收货人信息</h3>
             <div class="address_info">
-                <?php foreach ($member_address as $address):?>
-                <p>
-                    <input type="radio" value="<?=$address->id?>" name="address_id" <?=$address->is_default ? 'checked' : ''?>/><?=$address->consignee?>  <?=$address->tel?>  <?=$address->pro->name?> <?=$address->cit->name?> <?=$address->are->name?> <?=$address->detail_address?> <?=$address->is_default ? '<span style="color: red;">[ 默认地址 ]</span>' : ''?>
-                </p>
-                <?php endforeach;?>
+                <?php
+                if($member_address){
+                    foreach ($member_address as $address):?>
+                        <p>
+                            <input type="radio" value="<?=$address->id?>" name="address_id" <?=$address->is_default ? 'checked' : ''?>/><?=$address->consignee?>  <?=$address->tel?>  <?=$address->pro->name?> <?=$address->cit->name?> <?=$address->are->name?> <?=$address->detail_address?> <?=$address->is_default ? '<span style="color: red;">[ 默认地址 ]</span>' : ''?>
+                        </p>
+                <?php
+                    endforeach;
+                }else{
+                    echo \yii\helpers\Html::a('暂无收货地址，点此添加',['address/add']);
+                }
+                ?>
             </div>
         </div>
         <!-- 收货人信息  end-->
@@ -46,14 +64,14 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
             <h3>送货方式 </h3>
             <div class="delivery_select">
                 <table>
-                    <thead>
+                    <thead class="need_left">
                     <tr>
                         <th class="col1">送货方式</th>
                         <th class="col2">运费</th>
                         <th class="col3">运费标准</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="need_left">
                     <?php
                     foreach ($deliveries as $k=>$delivery):
                     ?>
@@ -76,7 +94,7 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
         <div class="pay">
             <h3>支付方式 </h3>
             <div class="pay_select">
-                <table>
+                <table class="need_left">
                     <?php foreach ($payments as $p=>$payment):?>
                     <tr <?=($p==0) ? 'class="cur"' : ''?>>
                         <td class="col1"><input type="radio" name="Order[payment_id]" value="<?=$payment['payment_id']?>" <?=$p ? '' : 'checked="checked"'?>/><?=$payment['payment_name']?></td>
@@ -121,7 +139,7 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
         <div class="goods">
             <h3>商品清单</h3>
             <table>
-                <thead>
+                <thead class="need_left">
                 <tr>
                     <th class="col1">商品</th>
                     <th class="col3">价格</th>
@@ -129,7 +147,7 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
                     <th class="col5">小计</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="need_left">
                 <?php
                 $total_amount = 0;
                 $total_price = 0;
@@ -148,7 +166,7 @@ $this->registerJsFile('@web/js/jquery-1.8.3.min.js',['depends'=>\yii\web\JqueryA
                 </tr>
                 <?php endforeach;?>
                 </tbody>
-                <tfoot>
+                <tfoot id="need_right">
                 <tr>
                     <td colspan="5">
                         <ul>
