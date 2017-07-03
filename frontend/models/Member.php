@@ -66,6 +66,8 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
             ['read_agree','safe'],
             //验证手机号码
             ['sms_code','validateSms'],
+            //openid
+            ['openid','unique'],
         ];
     }
 
