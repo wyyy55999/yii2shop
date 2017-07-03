@@ -10,13 +10,18 @@ class MemberLoginForm extends Model
     public $password;
     public $code;
     public $rememberPwd;
+    //定义场景常量
+    const SCENARIO_LOGIN = 'login';
+    const SCENARIO_API = 'api';
+
     //规则
     public function rules()
     {
         return [
             [['username','password','code'],'required'],
             ['rememberPwd','safe'],
-            ['code','captcha','captchaAction'=>'site/captcha'],
+            ['code','captcha','captchaAction'=>'site/captcha','on'=>self::SCENARIO_LOGIN],
+            ['code','captcha','captchaAction'=>'api/captcha','on'=>self::SCENARIO_API],
             [['username','password'],'MemberLogin'],
         ];
     }

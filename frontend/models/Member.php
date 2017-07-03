@@ -32,6 +32,10 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
     public $read_agree;
     //手机验证码
     public $sms_code;
+    //定义场景常量
+    const SCENARIO_REGISTER = 'register';
+    const SCENARIO_API = 'api';
+
     /**
      * @inheritdoc
      */
@@ -52,7 +56,8 @@ class Member extends \yii\db\ActiveRecord implements IdentityInterface
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'email'], 'string', 'max' => 100],
             [['tel'], 'string', 'max' => 11],
-            ['code','captcha','captchaAction'=>'site/captcha'],
+            ['code','captcha','captchaAction'=>'site/captcha','on'=>self::SCENARIO_REGISTER],
+            ['code','captcha','captchaAction'=>'api/captcha','on'=>self::SCENARIO_API],
             ['repassword','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致'],
             ['email','email'],
             ['tel','match','pattern'=>'/^1[34578]\d{9}$/','message'=>'请输入正确的手机号'],
