@@ -37,7 +37,7 @@ return [
          */
         'oauth' => [
             'scopes'   => ['snsapi_base'],
-            'callback' => 'http://dlm.penneyx.cn/yii2shop/frontend/web/wechat/callback.html',
+            'callback' => 'http://dlm.penneyx.cn/yii2shop/frontend/web/jx-wechat/callback.html',
         ],
         /**
          * 微信支付
